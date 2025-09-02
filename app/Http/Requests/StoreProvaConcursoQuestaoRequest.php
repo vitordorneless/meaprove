@@ -11,7 +11,7 @@ class StoreProvaConcursoQuestaoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreProvaConcursoQuestaoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'prova_concurso_id' => 'required|exists:provas_concursos,id',
+            'questao_id' => 'required|exists:questaos,id',
+            'ordem' => 'required|integer|min:1',
+            'peso' => 'required|numeric|min:0',
+            'ativo' => 'required|boolean',
         ];
     }
 }

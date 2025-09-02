@@ -11,7 +11,7 @@ class UpdateProvaTextoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateProvaTextoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'prova_concurso_id' => 'required|exists:provas_concursos,id',
+            'texto' => 'required|string',
+            'ativo' => 'required|boolean',
         ];
     }
 }

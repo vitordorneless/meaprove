@@ -11,7 +11,7 @@ class UpdateTipoProvaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateTipoProvaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255|unique:tipos_provas,nome,' . $this->route('tipo_prova')->id,
+            'descricao' => 'nullable|string',
+            'ativo' => 'required|boolean',
         ];
     }
 }

@@ -11,7 +11,7 @@ class UpdateBancaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateBancaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255|unique:bancas,nome,' . $this->route('banca')->id,
+            'descricao' => 'nullable|string',
+            'ativo' => 'required|boolean',
         ];
     }
 }

@@ -11,7 +11,7 @@ class UpdateConhecimentoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateConhecimentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255|unique:conhecimentos,nome,' . $this->route('conhecimento')->id,
+            'descricao' => 'nullable|string',
+            'ativo' => 'required|boolean',
         ];
     }
 }

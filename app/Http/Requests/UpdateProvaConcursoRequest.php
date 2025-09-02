@@ -11,7 +11,7 @@ class UpdateProvaConcursoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateProvaConcursoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255|unique:provas_concursos,nome,' . $this->route('prova_concurso')->id,
+            'descricao' => 'nullable|string',
+            'data_prova' => 'required|date',
+            'banca_id' => 'required|exists:bancas,id',
+            'orgao_id' => 'required|exists:orgaos,id',
+            'ativo' => 'required|boolean',
         ];
     }
 }
