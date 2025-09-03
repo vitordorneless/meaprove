@@ -13,7 +13,9 @@ class BancaController extends Controller
      */
     public function index()
     {
-        //
+        $bancas = Banca::latest()->paginate(10);
+        return view('bancas.index', compact('bancas'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class BancaController extends Controller
      */
     public function create()
     {
-        //
+        return view('bancas.create');   
     }
 
     /**
@@ -29,23 +31,14 @@ class BancaController extends Controller
      */
     public function store(StoreBancaRequest $request)
     {
-        //
+        Banca::create($request->validated());
+        return redirect()->route('bancas.index')
+            ->with('success', 'Banca criada com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Banca $banca)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Banca $banca)
     {
-        //
+        return view('bancas.edit', compact('banca'));
     }
 
     /**
@@ -53,7 +46,9 @@ class BancaController extends Controller
      */
     public function update(UpdateBancaRequest $request, Banca $banca)
     {
-        //
+        $banca->update($request->validated());
+        return redirect()->route('bancas.index')
+            ->with('success', 'Banca atualizada com sucesso.');
     }
 
     /**
@@ -61,6 +56,8 @@ class BancaController extends Controller
      */
     public function destroy(Banca $banca)
     {
-        //
+        $banca->delete();
+        return redirect()->route('bancas.index')
+            ->with('success', 'Banca deletada com sucesso.');
     }
 }

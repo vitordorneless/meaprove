@@ -13,7 +13,9 @@ class ConhecimentoController extends Controller
      */
     public function index()
     {
-        //
+        $conhecimentos = Conhecimento::latest()->paginate(10);
+        return view('conhecimentos.index', compact('conhecimentos'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class ConhecimentoController extends Controller
      */
     public function create()
     {
-        //
+        return view('conhecimentos.create');
     }
 
     /**
@@ -29,23 +31,17 @@ class ConhecimentoController extends Controller
      */
     public function store(StoreConhecimentoRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Conhecimento $conhecimento)
-    {
-        //
-    }
+        Conhecimento::create($request->validated());
+        return redirect()->route('conhecimentos.index')
+            ->with('success', 'Conhecimento criado com sucesso.');
+    }    
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Conhecimento $conhecimento)
     {
-        //
+        return view('conhecimentos.edit', compact('conhecimento'));
     }
 
     /**
@@ -53,7 +49,9 @@ class ConhecimentoController extends Controller
      */
     public function update(UpdateConhecimentoRequest $request, Conhecimento $conhecimento)
     {
-        //
+        $conhecimento->update($request->validated());
+        return redirect()->route('conhecimentos.index')
+            ->with('success', 'Conhecimento atualizado com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class ConhecimentoController extends Controller
      */
     public function destroy(Conhecimento $conhecimento)
     {
-        //
+        $conhecimento->delete();
+        return redirect()->route('conhecimentos.index')
+            ->with('success', 'Conhecimento deletado com sucesso.');
     }
 }

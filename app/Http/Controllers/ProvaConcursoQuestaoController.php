@@ -13,7 +13,9 @@ class ProvaConcursoQuestaoController extends Controller
      */
     public function index()
     {
-        //
+        $provaConcursoQuestaos = ProvaConcursoQuestao::latest()->paginate(10);
+        return view('prova_concurso_questoes.index', compact('provaConcursoQuestaos'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class ProvaConcursoQuestaoController extends Controller
      */
     public function create()
     {
-        //
+        return view('prova_concurso_questoes.create');
     }
 
     /**
@@ -29,23 +31,17 @@ class ProvaConcursoQuestaoController extends Controller
      */
     public function store(StoreProvaConcursoQuestaoRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProvaConcursoQuestao $provaConcursoQuestao)
-    {
-        //
-    }
+        ProvaConcursoQuestao::create($request->validated());
+        return redirect()->route('prova_concurso_questoes.index')
+            ->with('success', 'Questão da Prova do Concurso criada com sucesso.');
+    }    
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(ProvaConcursoQuestao $provaConcursoQuestao)
     {
-        //
+        return view('prova_concurso_questoes.edit', compact('provaConcursoQuestao'));
     }
 
     /**
@@ -53,7 +49,9 @@ class ProvaConcursoQuestaoController extends Controller
      */
     public function update(UpdateProvaConcursoQuestaoRequest $request, ProvaConcursoQuestao $provaConcursoQuestao)
     {
-        //
+        $provaConcursoQuestao->update($request->validated());
+        return redirect()->route('prova_concurso_questoes.index')
+            ->with('success', 'Questão da Prova do Concurso atualizada com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class ProvaConcursoQuestaoController extends Controller
      */
     public function destroy(ProvaConcursoQuestao $provaConcursoQuestao)
     {
-        //
+        $provaConcursoQuestao->delete();
+        return redirect()->route('prova_concurso_questoes.index')
+            ->with('success', 'Questão da Prova do Concurso deletada com sucesso.');
     }
 }

@@ -13,7 +13,9 @@ class TipoProvaController extends Controller
      */
     public function index()
     {
-        //
+        $tipoProvas = TipoProva::latest()->paginate(10);
+        return view('tipo_provas.index', compact('tipoProvas'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class TipoProvaController extends Controller
      */
     public function create()
     {
-        //
+        return view('tipo_provas.create');
     }
 
     /**
@@ -29,15 +31,9 @@ class TipoProvaController extends Controller
      */
     public function store(StoreTipoProvaRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(TipoProva $tipoProva)
-    {
-        //
+        TipoProva::create($request->validated());
+        return redirect()->route('tipo_provas.index')
+            ->with('success', 'Tipo de Prova criado com sucesso.');
     }
 
     /**
@@ -45,7 +41,7 @@ class TipoProvaController extends Controller
      */
     public function edit(TipoProva $tipoProva)
     {
-        //
+        return view('tipo_provas.edit', compact('tipoProva'));
     }
 
     /**
@@ -53,7 +49,9 @@ class TipoProvaController extends Controller
      */
     public function update(UpdateTipoProvaRequest $request, TipoProva $tipoProva)
     {
-        //
+        $tipoProva->update($request->validated());
+        return redirect()->route('tipo_provas.index')
+            ->with('success', 'Tipo de Prova atualizado com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class TipoProvaController extends Controller
      */
     public function destroy(TipoProva $tipoProva)
     {
-        //
+        $tipoProva->delete();
+        return redirect()->route('tipo_provas.index')
+            ->with('success', 'Tipo de Prova deletado com sucesso.');
     }
 }

@@ -13,7 +13,9 @@ class OrgaoController extends Controller
      */
     public function index()
     {
-        //
+        $orgaos = Orgao::latest()->paginate(10);
+        return view('orgaos.index', compact('orgaos'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class OrgaoController extends Controller
      */
     public function create()
     {
-        //
+        return view('orgaos.create');
     }
 
     /**
@@ -29,15 +31,9 @@ class OrgaoController extends Controller
      */
     public function store(StoreOrgaoRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Orgao $orgao)
-    {
-        //
+        Orgao::create($request->validated());
+        return redirect()->route('orgaos.index')
+            ->with('success', 'Órgão criado com sucesso.');
     }
 
     /**
@@ -45,7 +41,7 @@ class OrgaoController extends Controller
      */
     public function edit(Orgao $orgao)
     {
-        //
+        return view('orgaos.edit', compact('orgao'));
     }
 
     /**
@@ -53,7 +49,9 @@ class OrgaoController extends Controller
      */
     public function update(UpdateOrgaoRequest $request, Orgao $orgao)
     {
-        //
+        $orgao->update($request->validated());
+        return redirect()->route('orgaos.index')
+            ->with('success', 'Órgão atualizado com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class OrgaoController extends Controller
      */
     public function destroy(Orgao $orgao)
     {
-        //
+        $orgao->delete();
+        return redirect()->route('orgaos.index')
+            ->with('success', 'Órgão deletado com sucesso.');
     }
 }

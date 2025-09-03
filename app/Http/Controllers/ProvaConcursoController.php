@@ -13,7 +13,9 @@ class ProvaConcursoController extends Controller
      */
     public function index()
     {
-        //
+        $provaConcursos = ProvaConcurso::latest()->paginate(10);
+        return view('prova_concursos.index', compact('provaConcursos'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class ProvaConcursoController extends Controller
      */
     public function create()
     {
-        //
+        return view('prova_concursos.create');
     }
 
     /**
@@ -29,23 +31,17 @@ class ProvaConcursoController extends Controller
      */
     public function store(StoreProvaConcursoRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProvaConcurso $provaConcurso)
-    {
-        //
-    }
+        ProvaConcurso::create($request->validated());
+        return redirect()->route('prova_concursos.index')
+            ->with('success', 'Prova do Concurso criado com sucesso.');
+    }    
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(ProvaConcurso $provaConcurso)
     {
-        //
+        return view('prova_concursos.edit', compact('provaConcurso'));
     }
 
     /**
@@ -53,7 +49,9 @@ class ProvaConcursoController extends Controller
      */
     public function update(UpdateProvaConcursoRequest $request, ProvaConcurso $provaConcurso)
     {
-        //
+        $provaConcurso->update($request->validated());
+        return redirect()->route('prova_concursos.index')
+            ->with('success', 'Prova do Concurso atualizado com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class ProvaConcursoController extends Controller
      */
     public function destroy(ProvaConcurso $provaConcurso)
     {
-        //
+        $provaConcurso->delete();
+        return redirect()->route('prova_concursos.index')
+            ->with('success', 'Prova do Concurso deletado com sucesso.');
     }
 }

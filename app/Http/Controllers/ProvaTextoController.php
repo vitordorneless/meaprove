@@ -13,7 +13,9 @@ class ProvaTextoController extends Controller
      */
     public function index()
     {
-        //
+        $provaTextos = ProvaTexto::latest()->paginate(10);
+        return view('prova_textos.index', compact('provaTextos'))
+            ->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     /**
@@ -21,7 +23,7 @@ class ProvaTextoController extends Controller
      */
     public function create()
     {
-        //
+        return view('prova_textos.create');
     }
 
     /**
@@ -29,23 +31,17 @@ class ProvaTextoController extends Controller
      */
     public function store(StoreProvaTextoRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ProvaTexto $provaTexto)
-    {
-        //
-    }
+        ProvaTexto::create($request->validated());
+        return redirect()->route('prova_textos.index')
+            ->with('success', 'Prova de Texto criada com sucesso.');
+    }    
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(ProvaTexto $provaTexto)
     {
-        //
+        return view('prova_textos.edit', compact('provaTexto'));
     }
 
     /**
@@ -53,7 +49,9 @@ class ProvaTextoController extends Controller
      */
     public function update(UpdateProvaTextoRequest $request, ProvaTexto $provaTexto)
     {
-        //
+        $provaTexto->update($request->validated());
+        return redirect()->route('prova_textos.index')
+            ->with('success', 'Prova de Texto atualizada com sucesso.');
     }
 
     /**
@@ -61,6 +59,8 @@ class ProvaTextoController extends Controller
      */
     public function destroy(ProvaTexto $provaTexto)
     {
-        //
+        $provaTexto->delete();
+        return redirect()->route('prova_textos.index')
+            ->with('success', 'Prova de Texto deletada com sucesso.');
     }
 }
